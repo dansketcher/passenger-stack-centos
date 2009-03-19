@@ -4,7 +4,7 @@ package :postgres, :provides => :database do
    post :install, 'sudo rm -Rf /var/lib/pgsql'
    post :install, 'sudo mkdir /var/lib/pgsql'
    post :install, 'sudo chown postgres:postgres /var/lib/pgsql'
-   post :install, 'sudo sudo -u postgres initdb --encoding=UTF8 --auth=trust --pgdata=/var/lib/pgsql/data'
+   post :install, 'sudo sudo -u postgres initdb --encoding=UTF8 --pgdata=/var/lib/pgsql/data'
    post :install, 'sudo /sbin/service postgresql start'
   end
   
