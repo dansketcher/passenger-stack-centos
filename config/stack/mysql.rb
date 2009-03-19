@@ -1,6 +1,6 @@
 package :mysql, :provides => :database do
   description 'MySQL Database'
-  apt %w( mysql-server mysql-client libmysqlclient15-dev )
+  yum 'mysql-server'
   
   verify do
     has_executable 'mysql'
@@ -9,11 +9,16 @@ end
  
 package :mysql_driver, :provides => :ruby_database_driver do
   description 'Ruby MySQL database driver'
-  gem 'mysql'
-  
+
   verify do
     has_gem 'mysql'
   end
   
-  requires :mysql, :ruby_enterprise
+  requires :mysql, :mysql_dependencies, :ruby_enterprise
+end
+
+package :mysql_dependencies do
+  yum 'mysql-devel' do
+    post :install, 'gem install mysql -- --with-mysql-config=/usr/bin/mysql_config'
+  end
 end

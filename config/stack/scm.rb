@@ -11,5 +11,6 @@ end
 
 package :git_dependencies do
   description 'Git Build Dependencies'
-  apt 'git-core', :dependencies_only => true
+  yum 'perl-ExtUtils-MakeMaker'
+
 end

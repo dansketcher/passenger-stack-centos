@@ -1,8 +1,8 @@
 package :memcached_daemon, :provides => :memcached do
   description 'Memcached, a distributed memory object store'
-  apt %w( memcached )
+  yum %w( memcached )
   
-  post :install, "/etc/init.d/memcached start"
+  post :install, "sudo /sbin/service memcached start"
   post :install, "sudo ldconfig"
   
   verify do

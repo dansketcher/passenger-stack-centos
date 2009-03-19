@@ -1,11 +1,11 @@
-# Passenger stack, zero to hero in under five minutes
+# Fork of Passenger stack modified to support Red Hat based distributions (CentoOS, Fedora, RHE), zero to hero in under five minutes
 Scripts for [Sprinkle](http://github.com/crafterm/sprinkle/ "Sprinkle"), the provisioning tool
 
 [Watch the demo screen cast](http://www.vimeo.com/2888665) of passenger-stack.
 
 ## How to get your sprinkle on:
 
-* Get a brand spanking new slice / host (Ubuntu please)
+* Get a brand spanking new slice / host (Red Hat-based)
 * Create yourself a user, add yourself to the /etc/sudoers file
 * Set your slices url / ip address in deploy.rb (config/deploy.rb.example provided)
 * Set username in config/deploy.rb if it isn't the same as your local machine (config/deploy.rb.example provided)
@@ -31,28 +31,28 @@ Other things you should probably consider:
 
 ### Wait, what does all this install?
 
-* Apache (Apt)
+* Apache (Yum)
   * Scripts and stylesheets are compressed using mod_deflate
   * ETags are applied to static assets
   * Expires headers are applied to static assets
 * Ruby Enterprise (Source) [includes rubygems]
 * Passenger (Rubygem)
-* Memcached (Apt)
+* Memcached (Yum)
 * Libmemcached (Source)
-* MySQL (Apt) or PostgreSQL (Apt)
+* MySQL (Yum) or PostgreSQL (Yum)
 * MySQL or PostgreSQL ruby database drivers (Rubygem)
-* Git (Apt)
+* Git (Source)
 
 ## Requirements
 * Ruby
 * Capistrano
 * Sprinkle (github.com/crafterm/sprinkle)
-* An Ubuntu based VPS (known to not work on Debian Etch†)
+* An Red Hat based VPS or EC2 instance
 
 ## Thanks
-
+* [Ben Schwarz](http://github.com/benschwarz), for making it very simple to customize the stack to work with Red Hat-based systems 
 * [Marcus Crafter](http://github.com/crafterm) and other Sprinkle contributors
-* [Slicehost](http://slicehost.com), for giving a free slice for testing passenger stack
+* [Slicehost](http://slicehost.com), for a free slice for testing passenger stack
 * [Nathan de Vries](http://github.com/atnan) for Postgres support
 * [Anthony Kolber](http://aestheticallyloyal.com) for the github pages design
 * [Stephen Eley](http://github.com/SFEley) for some sanity checks on git dependencies
@@ -61,7 +61,3 @@ Other things you should probably consider:
 
 Don't run this on a system that has already been deemed "in production", its not malicious, but there is a fair chance
 that you'll ass something up monumentally. You have been warned. 
-
-### Footnotes
-
-† This issue lies between differences in apt between debian and ubuntu, my feedback has been forwarded and discussed with Marcus, the author of sprinkle. I believe he is looking into it.

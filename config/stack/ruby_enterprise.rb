@@ -20,5 +20,5 @@ package :ruby_enterprise do
 end
 
 package :ree_dependencies do 
-  apt %w(zlib1g-dev libreadline5-dev libssl-dev)
+  yum %w(gcc-c++ zlib-devel openssl-devel readline-devel)
 end
