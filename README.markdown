@@ -39,8 +39,8 @@ Other things you should probably consider:
 * Passenger (Rubygem)
 * Memcached (Yum)
 * Libmemcached (Source)
-* MySQL (Yum) or PostgreSQL (Yum)
-* MySQL or PostgreSQL ruby database drivers (Rubygem)
+* MySQL (Yum), PostgreSQL (Yum), SQLite (Yum)
+* MySQL, PostgreSQL, SQLite Ruby database drivers (Rubygem)
 * Git (Source)
 
 ## Requirements
