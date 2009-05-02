@@ -20,5 +20,5 @@ package :ruby_enterprise do
 end
 
 package :ree_dependencies do 
-  yum %w(gcc-c++ zlib-devel openssl-devel readline-devel)
+  yum %w(ruby ruby-libs gcc-c++ zlib-devel openssl-devel readline-devel)
 end
