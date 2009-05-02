@@ -33,7 +33,7 @@ deployment do
   # source based package installer defaults
   source do
     prefix   '/usr/local'
-    archives '/usr/local/sources'
+    archives '/usr/local/src'
     builds   '/usr/local/build'
   end
 end
