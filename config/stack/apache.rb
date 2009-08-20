@@ -13,9 +13,13 @@ end
 
 package :passenger, :provides => :appserver do
   description 'Phusion Passenger (mod_rails)'
-  version '2.2.2'
+  version '2.2.4'
   gem 'passenger' do
    post :install, 'echo -en "\n\n\n\n" | sudo passenger-install-apache2-module'
+
+   # Per passenger docs
+   # http://www.modrails.com/documentation/Users%20guide.html#_the_apache_error_log_says_that_the_spawn_manager_script_does_not_exist_or_that_it_does_not_have_permission_to_execute_it
+   post :install, "chcon -R -h -t httpd_sys_content_t /usr/local/ruby-enterprise/lib/ruby/gems/1.8/gems/passenger-#{version}"
 
     # Create the passenger conf file
     post :install, 'mkdir -p /etc/httpd/extras'
@@ -31,6 +35,11 @@ package :passenger, :provides => :appserver do
 
     # Restart apache to note changes
     post :install, '/sbin/service httpd restart'
+    # You may get an error message:
+    # [Thu Aug 20 12:46:59 2009] [error] *** Passenger could not be initialized because of this error: Could not connect to the ApplicationPool server: Broken pipe (32)
+    # Which can be ignored per:
+    # http://stackoverflow.com/questions/259542/apache-cannot-initialize-passenger-broken-pipe-32-when-connecting-to-applicati
+    # However this script will fail until you fix it.
   end
 
   verify do
