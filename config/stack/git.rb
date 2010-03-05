@@ -1,16 +1,11 @@
 package :git, :provides => :scm do
-  description 'Git Distributed Version Control'
-  version '1.6.1'
-  source "http://kernel.org/pub/software/scm/git/git-#{version}.tar.gz"
-  requires :git_dependencies
-  
-  verify do
-    has_file '/usr/local/bin/git'
-  end
+  description 'Git from EPEL'
+  yum 'git'
+  requires :yum_repository_epel
 end
 
-package :git_dependencies do
-  description 'Git Build Dependencies'
-  yum 'perl-ExtUtils-MakeMaker'
-
+package :gitosis do
+  description 'Gitosis server'
+  yum 'gitosis'
+  requires :yum_repository_epel
 end
