@@ -13,13 +13,13 @@ end
 
 package :passenger, :provides => :appserver do
   description 'Phusion Passenger (mod_rails)'
-  version '2.2.4'
+  version '2.2.10'
   gem 'passenger' do
-   post :install, 'echo -en "\n\n\n\n" | sudo passenger-install-apache2-module'
+    post :install, 'echo -en "\n\n\n\n" | sudo passenger-install-apache2-module'
 
-   # Per passenger docs
-   # http://www.modrails.com/documentation/Users%20guide.html#_the_apache_error_log_says_that_the_spawn_manager_script_does_not_exist_or_that_it_does_not_have_permission_to_execute_it
-   post :install, "chcon -R -h -t httpd_sys_content_t /usr/local/ruby-enterprise/lib/ruby/gems/1.8/gems/passenger-#{version}"
+    # Per passenger docs
+    # http://www.modrails.com/documentation/Users%20guide.html#_the_apache_error_log_says_that_the_spawn_manager_script_does_not_exist_or_that_it_does_not_have_permission_to_execute_it
+    post :install, "chcon -R -h -t httpd_sys_content_t /usr/local/ruby-enterprise/lib/ruby/gems/1.8/gems/passenger-#{version}"
 
     # Create the passenger conf file
     post :install, 'mkdir -p /etc/httpd/extras'
