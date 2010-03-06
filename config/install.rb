@@ -1,5 +1,5 @@
 # Require our stack
-%w(repos essential apache git ruby_enterprise memcached postgresql mysql sqlite subversion).each do |r|
+%w(repos essential apache git ruby_enterprise memcached postgresql mysql sqlite subversion ntp).each do |r|
   require File.join(File.dirname(__FILE__), 'stack', r)
 end
 
