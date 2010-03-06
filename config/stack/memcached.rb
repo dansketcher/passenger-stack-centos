@@ -1,6 +1,6 @@
 package :memcached_daemon, :provides => :memcached do
   description 'Memcached, a distributed memory object store'
-  yum %w( memcached )
+  yum %w( memcached memcached-selinux )
   
   post :install, "sudo /sbin/service memcached start"
   post :install, "sudo ldconfig"
@@ -11,6 +11,6 @@ package :memcached_daemon, :provides => :memcached do
 end
 
 package :libmemcached do
-  source 'http://download.tangent.org/libmemcached-0.25.tar.gz'
-  requires :memcached_daemon
+  yum 'libmemcache libmemcache-devel'
+  requires :yum_repository_rpmforge, :memcached_daemon
 end
