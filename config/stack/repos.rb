@@ -10,9 +10,8 @@ end
 
 package :yum_repository_rpmforge do
   version 'rpmforge-release-0.5.1-1.el5.rf'
-  arch = 'x86_64'
-  
-  rpm "http://dag.wieers.com/rpm/packages/rpmforge-release/#{version}.#{arch}.rpm"
+
+  rpm "http://rpmforge.sw.be/redhat/el5/en/x86_64/rpmforge/RPMS/#{version}.`uname -i`.rpm"
 
   verify do
     has_rpm version
