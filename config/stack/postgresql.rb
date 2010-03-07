@@ -1,15 +1,13 @@
 package :postgres, :provides => :database do
   description 'PostgreSQL database'
   yum 'postgresql-server' do
-   post :install, 'sudo rm -Rf /var/lib/pgsql'
-   post :install, 'sudo mkdir /var/lib/pgsql'
-   post :install, 'sudo chown postgres:postgres /var/lib/pgsql'
-   post :install, 'sudo sudo -u postgres initdb --encoding=UTF8 --pgdata=/var/lib/pgsql/data'
-   post :install, 'sudo /sbin/service postgresql start'
+    # Use initdb so that the SELinux access controls are set correctly
+    post :install, 'sudo /sbin/service postgresql initdb'
+    post :install, 'sudo /sbin/service postgresql start'
   end
   
   verify do
-    has_executable 'psql'
+    has_executable '/etc/init.d/postgresql'
   end
 end
  
