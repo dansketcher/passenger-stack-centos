@@ -14,6 +14,7 @@ policy :passenger_stack, :roles => :app do
   requires :apache_etag_support     # == Apache extras
   requires :apache_deflate_support  # Read about these specialties in 
   requires :apache_expires_support  # stack/apache.rb
+  requires :apache_ssl_support      # ==
   requires :appserver               # Passenger
   requires :ruby_enterprise         # Ruby Enterprise edition
   requires :database                # MySQL or Postgres

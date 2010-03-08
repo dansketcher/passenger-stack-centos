@@ -8,7 +8,7 @@ package :apache, :provides => :webserver do
     has_executable '/usr/sbin/httpd'
   end
 
-  requires :build_essential
+  requires :yum_repository_pgdg, :build_essential
 end
 
 package :passenger, :provides => :appserver do
@@ -29,7 +29,13 @@ package :passenger, :provides => :appserver do
     [%Q(LoadModule passenger_module /usr/local/ruby-enterprise/lib/ruby/gems/1.8/gems/passenger-#{version}/ext/apache2/mod_passenger.so),
     %Q(PassengerRoot /usr/local/ruby-enterprise/lib/ruby/gems/1.8/gems/passenger-#{version}),
     %q(PassengerRuby /usr/local/bin/ruby),
-    %q(RailsEnv production)].each do |line|
+    %q(RailsEnv production),
+    %q(PassengerPoolIdleTime 0),
+    %q(PassengerUseGlobalQueue on),
+    %q(# PassengerMaxRequests 5000),
+    %q(PassengerStatThrottleRate 4),
+    %q(RailsAppSpawnerIdleTime 0)
+    ].each do |line|
       post :install, "echo '#{line}' |sudo tee -a /etc/httpd/extras/passenger.conf"
     end
 
@@ -54,12 +60,25 @@ end
 # These "installers" are strictly optional, I believe
 # that everyone should be doing this to serve sites more quickly.
 
+# Enable SSL
+package :apache_ssl_support do
+  yum "openssl mod_ssl"
+
+  verify do
+    #has_file '/etc/httpd/modules/mod_ssl.so'
+    has_file '/etc/httpd/conf.d/ssl.conf'
+  end
+
+  requires :apache
+end
+
 # Enable ETags
 package :apache_etag_support do
   apache_conf = "/etc/httpd/conf/httpd.conf"
   config = <<eol
-  # Passenger-stack-etags
-  FileETag MTime Size
+
+# Passenger-stack-etags
+FileETag MTime Size
 eol
 
   push_text config, apache_conf, :sudo => true
@@ -71,15 +90,15 @@ end
 package :apache_deflate_support do
   apache_conf = "/etc/httpd/conf/httpd.conf"
   config = <<eol
-  # Passenger-stack-deflate
-  <IfModule mod_deflate.c>
-    # compress content with type html, text, and css
-    AddOutputFilterByType DEFLATE text/css text/html text/javascript application/javascript application/x-javascript text/js text/plain text/xml
-    <IfModule mod_headers.c>
-      # properly handle requests coming from behind proxies
-      Header append Vary User-Agent
-    </IfModule>
+# Passenger-stack-deflate
+<IfModule mod_deflate.c>
+  # compress content with type html, text, and css
+  AddOutputFilterByType DEFLATE text/css text/html text/javascript application/javascript application/x-javascript text/js text/plain text/xml
+  <IfModule mod_headers.c>
+    # properly handle requests coming from behind proxies
+    Header append Vary User-Agent
   </IfModule>
+</IfModule>
 eol
 
   push_text config, apache_conf, :sudo => true
@@ -92,13 +111,13 @@ package :apache_expires_support do
   apache_conf = "/etc/httpd/conf/httpd.conf"
 
   config = <<eol
-  # Passenger-stack-expires
-  <IfModule mod_expires.c>
-    <FilesMatch "\.(jpg|gif|png|css|js)$">
-         ExpiresActive on
-         ExpiresDefault "access plus 1 year"
-     </FilesMatch>
-  </IfModule>
+# Passenger-stack-expires
+<IfModule mod_expires.c>
+  <FilesMatch "\.(jpg|gif|png|css|js)$">
+       ExpiresActive on
+       ExpiresDefault "access plus 1 year"
+   </FilesMatch>
+</IfModule>
 eol
 
   push_text config, apache_conf, :sudo => true
