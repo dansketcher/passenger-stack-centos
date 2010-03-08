@@ -19,7 +19,7 @@ package :ruby_enterprise do
   verify do
     has_directory install_path
     has_executable "#{install_path}/bin/ruby"
-    binaries.each {|bin| has_symlink "/usr/local/bin/#{bin}", "#{install_path}/bin/#{bin}" }
+    binaries.each {|bin| has_symlink "/usr/local/bin/#{bin}", "#{exec_path}/bin/#{bin}" }
   end
   
   # Add the exec_path to the PATH for the case of gems installed later not otherwise being on the PATH
