@@ -1,5 +1,5 @@
 # Require our stack
-%w(repos essential apache git ruby_enterprise memcached postgresql mysql sqlite subversion ntp).each do |r|
+%w(repos essential apache git ruby_enterprise memcached postgresql mysql sqlite subversion ntp imagemagick).each do |r|
   require File.join(File.dirname(__FILE__), 'stack', r)
 end
 
@@ -7,6 +7,11 @@ end
 # Take what you want, leave what you don't
 # Build up your own and strip down your server until you get it right. 
 policy :passenger_stack, :roles => :app do
+  requires :yum_repository_pgdg
+  requires :yum_repository_rpmforge
+  requires :yum_repository_epel
+  
+  requires :ntp                     # Network Time Protocol daemon
   requires :webserver               # Apache
   requires :apache_etag_support     # == Apache extras
   requires :apache_deflate_support  # Read about these specialties in 
@@ -18,6 +23,8 @@ policy :passenger_stack, :roles => :app do
   requires :scm                     # Git or Subversion
   requires :memcached               # Memcached
   requires :libmemcached            # Libmemcached
+  requires :imagemagick             # Imagemagick
+  requires :rmagick                 # rmagick gem
 end
 
 deployment do
