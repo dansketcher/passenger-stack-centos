@@ -18,7 +18,7 @@ package :yum_repository_pgdg do
   #                    exclude=postgresql*
   #
   
-  version 'pgdg-centos-8.4-1'
+  version 'pgdg-centos-8.4-2'
   
   rpm "http://yum.pgsqlrpms.org/reporpms/8.4/#{version}.noarch.rpm"
   
