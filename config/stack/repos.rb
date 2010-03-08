@@ -1,8 +1,27 @@
 package :yum_repository_pgdg do
+  #  As per
+  #  http://www.postgresonline.com/journal/index.php?/archives/144-An-almost-idiots-guide-to-Install-and-Upgrade-to-PostgreSQL-8.4-with-Yum.html
+  #
+  #  To get a list of postgresql related stuff:
+  #  yum list | grep postgresql
+  #
+  #  If you see postgresql from other repositories besides pgdg84, then you need to exclude postgresql from coming from other repositories by following the below instructions excerpted from PostgreSQL How to Yum
+  #
+  #  * As root, cd /etc/yum.repos.d
+  #
+  #      * Edit distro's .repo file:
+  #            o On Fedora, edit fedora.repo and fedora-updates.repo, [fedora] sections
+  #            o On CentOS, edit CentOS-Base.repo, [base] and [updates] sections.
+  #            o On Red Hat, edit edit /etc/yum/pluginconf.d/rhnplugin.conf [main] section.
+  #                  + Add to the bottom of the section:
+  #
+  #                    exclude=postgresql*
+  #
+  
   version 'pgdg-centos-8.4-1'
   
   rpm "http://yum.pgsqlrpms.org/reporpms/8.4/#{version}.noarch.rpm"
-
+  
   verify do
     has_rpm version
   end
