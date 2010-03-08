@@ -1,5 +1,5 @@
 # Require our stack
-%w(repos essential apache git ruby_enterprise memcached postgresql mysql sqlite subversion ntp imagemagick).each do |r|
+%w(repos essential apache git ruby_enterprise memcached postgresql mysql sqlite subversion ntp imagemagick utilities).each do |r|
   require File.join(File.dirname(__FILE__), 'stack', r)
 end
 
@@ -26,6 +26,10 @@ policy :passenger_stack, :roles => :app do
   requires :rmagick                 # rmagick gem
   requires :phppgadmin
   requires :apache_mod_dav_svn
+  requires :archivers
+  requires :gnupg
+  requires :gnupg2
+  requires :duplicity
 end
 
 deployment do

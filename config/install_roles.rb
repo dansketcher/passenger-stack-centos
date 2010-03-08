@@ -1,5 +1,5 @@
 # Require our stack
-%w(repos essential apache git ruby_enterprise memcached postgresql mysql sqlite subversion ntp imagemagick).each do |r|
+%w(repos essential apache git ruby_enterprise memcached postgresql mysql sqlite subversion ntp imagemagick utilities).each do |r|
   require File.join(File.dirname(__FILE__), 'stack', r)
 end
 
@@ -11,6 +11,10 @@ policy :everyone, :roles => [:app, :web, :db] do
   requires :ntp                     # Network Time Protocol daemon
   requires :git                     # Git or Subversion
   requires :subversion              # Git or Subversion
+  requires :archivers
+  requires :gnupg
+  requires :gnupg2
+  requires :duplicity
 end
 
 policy :data, :roles => :db do
