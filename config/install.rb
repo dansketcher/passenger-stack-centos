@@ -24,6 +24,8 @@ policy :passenger_stack, :roles => :app do
   requires :libmemcached            # Libmemcached
   requires :imagemagick             # Imagemagick
   requires :rmagick                 # rmagick gem
+  requires :phppgadmin
+  requires :apache_mod_dav_svn
 end
 
 deployment do
