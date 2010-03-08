@@ -21,6 +21,12 @@ package :imagemagick_dependencies do
     post :install, "sudo yum install tcl-devel libpng-devel libjpeg-devel ghostscript-devel bzip2-devel freetype-devel libtiff-devel -y"
   end
 
+  verify do
+    %w(tcl-devel libpng-devel libjpeg-devel ghostscript-devel bzip2-devel freetype-devel libtiff-devel).each do |r|
+      has_rpm r
+    end
+  end
+
   requires :yum_repository_epel, :yum_repository_rpmforge
 end
 
