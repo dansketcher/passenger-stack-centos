@@ -27,3 +27,17 @@ package :yum_repository_epel do
     has_rpm version
   end
 end
+
+package :yum_repositories_external do
+  post :install, 'yum clean all'
+  post :install, 'yum makecache'
+
+  verify do
+    has_rpm 'pgdg-centos-8.4-1'
+    has_rpm 'rpmforge-release-0.5.1-1.el5.rf'
+    has_rpm 'epel-release-5-3'
+  end
+
+  requires :yum_repository_pgdg, :yum_repository_rpmforge, :yum_repository_epel
+end
+  

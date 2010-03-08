@@ -7,9 +7,7 @@ end
 # Take what you want, leave what you don't
 # Build up your own and strip down your server until you get it right. 
 policy :passenger_stack, :roles => :app do
-  requires :yum_repository_pgdg
-  requires :yum_repository_rpmforge
-  requires :yum_repository_epel
+  requires :yum_repositories_external
   
   requires :ntp                     # Network Time Protocol daemon
   requires :webserver               # Apache
