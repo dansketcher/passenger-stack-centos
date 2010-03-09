@@ -20,7 +20,7 @@ package :yum_repository_pgdg do
   
   version 'pgdg-centos-8.4-2'
   
-  rpm "http://yum.pgsqlrpms.org/reporpms/8.4/#{version}.noarch.rpm"
+  rpm "http://yum.pgrpms.org/reporpms/8.4/#{version}.noarch.rpm"
   
   verify do
     has_rpm version
