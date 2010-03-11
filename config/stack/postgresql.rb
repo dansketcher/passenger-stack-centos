@@ -4,6 +4,7 @@ package :postgres, :provides => :database do
     # Use initdb so that the SELinux access controls are set correctly
     post :install, 'sudo /sbin/service postgresql initdb'
     post :install, 'sudo /sbin/service postgresql start'
+    post :install, 'sudo /sbin/chkconfig postgresql on'
   end
   
   verify do

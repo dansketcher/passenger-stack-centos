@@ -2,6 +2,11 @@ package :apache, :provides => :webserver do
   description 'Apache2 web server.'
   yum 'httpd' do
     post :install, 'sudo /sbin/service httpd start'
+    post :install, 'sudo /sbin/chkconfig httpd on'
+    
+    post :install, "sudo sed -i 's/ServerTokens OS/ServerTokens Prod/' /etc/httpd/conf/httpd.conf"
+    post :install, "sudo sed -i 's/ServerSignature On/ServerSignature Off/' /etc/httpd/conf/httpd.conf"
+    #post :install, "sudo sed -i 's/TraceEnable On/TraceEnable Off/' /etc/httpd/conf/httpd.conf"
   end
 
   verify do
