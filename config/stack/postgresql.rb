@@ -1,14 +1,20 @@
 package :postgres, :provides => :database do
   description 'PostgreSQL database'
+  
+  pg_hba_conf = "/var/lib/pgsql/data/pg_hba.conf"
+  
   yum 'postgresql-server' do
     # Use initdb so that the SELinux access controls are set correctly
     post :install, 'sudo /sbin/service postgresql initdb'
     post :install, 'sudo /sbin/service postgresql start'
     post :install, 'sudo /sbin/chkconfig postgresql on'
+    post :install, %q(sed -i "s/127.0.0.1\/32          ident/127.0.0.1\/32          md5/" /var/lib/pgsql/data/pg_hba.conf)
+    post :install, %q(sed -i "s/::1\/128               ident/::1\/128               md5/" /var/lib/pgsql/data/pg_hba.conf)
   end
-  
+
   verify do
     has_executable '/etc/init.d/postgresql'
+    file_contains pg_hba_conf, "127.0.0.1/32          md5"
   end
   
   requires :yum_repository_pgdg, :postgres_client
