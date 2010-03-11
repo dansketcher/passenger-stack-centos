@@ -48,13 +48,14 @@ package :yum_repository_epel do
 end
 
 package :yum_repositories_external do
-  post :install, 'yum clean all'
-  post :install, 'yum makecache'
+  noop do
+    post :install, 'yum clean all'
+    post :install, 'yum makecache'
+    post :install, "sudo touch /etc/yum/yum_repositories_external"
+  end
 
   verify do
-    has_rpm 'pgdg-centos-8.4-1'
-    has_rpm 'rpmforge-release-0.5.1-1.el5.rf'
-    has_rpm 'epel-release-5-3'
+    has_file '/etc/yum/yum_repositories_external'
   end
 
   requires :yum_repository_pgdg, :yum_repository_rpmforge, :yum_repository_epel
