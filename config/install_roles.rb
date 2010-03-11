@@ -5,6 +5,7 @@ end
 
 # http://www.klaverstyn.com.au/wiki/index.php?title=Internode_repository
 
+# Be sure that the deploy user has sudo access and that env_keep has PATH added
 
 policy :everyone, :roles => [:app, :web, :db] do
   requires :yum_repositories_external
@@ -22,6 +23,7 @@ policy :data, :roles => :db do
   requires :ruby_enterprise         # Ruby Enterprise edition
   requires :postgresql_driver       # PostgreSQL gem
   requires :rmagick                 # rmagick gem
+  requires :postgres_archiving
 end
 
 policy :web, :roles => :app do
