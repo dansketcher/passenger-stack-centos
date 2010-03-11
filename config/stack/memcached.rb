@@ -4,6 +4,7 @@ package :memcached_daemon, :provides => :memcached do
   
   post :install, "sudo /sbin/service memcached start"
   post :install, "sudo ldconfig"
+  post :install, 'sudo /sbin/chkconfig memcached on'
   
   verify do
     has_executable 'memcached'
