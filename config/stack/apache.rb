@@ -33,7 +33,7 @@ package :passenger, :provides => :appserver do
 
     [%Q(LoadModule passenger_module /usr/local/ruby-enterprise/lib/ruby/gems/1.8/gems/passenger-#{version}/ext/apache2/mod_passenger.so),
     %Q(PassengerRoot /usr/local/ruby-enterprise/lib/ruby/gems/1.8/gems/passenger-#{version}),
-    %q(PassengerRuby /usr/local/bin/ruby),
+    %q(PassengerRuby /usr/local/ruby-enterprise/bin/ruby),
     %q(RailsEnv production),
     %q(PassengerPoolIdleTime 0),
     %q(PassengerUseGlobalQueue on),
@@ -74,6 +74,25 @@ package :apache_ssl_support do
     has_file '/etc/httpd/conf.d/ssl.conf'
   end
 
+  requires :apache
+end
+
+# Enable Vhosts
+package :apache_vhost_support do
+  apache_conf = "/etc/httpd/conf/httpd.conf"
+  
+  noop do
+    post :install, "sudo mkdir -p /etc/httpd/vhosts"
+  end
+  
+  config = <<eol
+
+# Apache-Vhosts
+Include /etc/httpd/vhosts/*.conf
+eol
+
+  push_text config, apache_conf, :sudo => true
+  verify { file_contains apache_conf, "Apache-Vhosts"}
   requires :apache
 end
 
