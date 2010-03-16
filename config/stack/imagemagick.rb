@@ -1,8 +1,9 @@
 # c.f: http://andrewduck.name/2009/01/imagemagick-64x-on-centos-5/  
 package :imagemagick do
   description 'ImageMagick'
+  version 'ImageMagick-6.6.0-5' # 'ImageMagick-6.6.*'
   
-  source  "ftp://mirror.aarnet.edu.au/pub/imagemagick/ImageMagick-6.6.*.tar.bz2" do
+  source  "ftp://mirror.aarnet.edu.au/pub/imagemagick/#{version}.tar.bz2" do
     prefix '/usr'
     custom_install "./configure --prefix=/usr --with-bzlib=yes --with-fontconfig=yes --with-freetype=yes --with-gslib=yes --with-gvc=yes --with-jpeg=yes --with-jp2=yes --with-png=yes --with-tiff=yes && make && make install"
     post :install, "sudo /sbin/ldconfig /usr/"
