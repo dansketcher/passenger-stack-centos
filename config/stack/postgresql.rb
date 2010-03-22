@@ -91,7 +91,9 @@ package :postgres_client do
 end
 
 package :phppgadmin do
-  yum 'phpPgAdmin'
+  yum 'phpPgAdmin' do
+    post :install, "/usr/sbin/setsebool -P httpd_can_network_connect_db 1"
+  end
   
   requires :yum_repository_pgdg, :postgres_client, :webserver
 end
