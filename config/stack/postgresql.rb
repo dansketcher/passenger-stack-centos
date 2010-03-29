@@ -23,12 +23,24 @@ end
 package :postgres_archiving do
   postgresql_conf = "/var/lib/pgsql/data/postgresql.conf"
   backup_sh = "/var/lib/pgsql/data/backup.sh"
+  rsync_no24_sh = "/var/lib/pgsql/data/rsync_no24.sh"
   
   config = %Q(
 # WAL-Archiving
 archive_mode = on
 archive_command = '/usr/bin/test ! -f /var/lib/pgsql/backups/%f && /usr/bin/rsync -arv %p /var/lib/pgsql/backups/%f </dev/null'
 archive_timeout = 300
+)
+
+  # An rsync wrapper that ignores error code 24
+  # c.f: http://samba.anu.edu.au/rsync/FAQ.html#10
+  rsync_no24 = %Q(#!/bin/sh
+rsync "$@"
+e=$?
+if test $e = 24; then
+  exit 0
+fi
+exit $e
 )
 
   # c.f: http://stackoverflow.com/questions/2094963/postgres-improving-pg-dump-pg-restore-performance
@@ -40,19 +52,21 @@ archive_timeout = 300
 # Change the postgres user password with : ALTER ROLE postgres WITH PASSWORD 'something_secret';
 export PGPASSWORD=<change me>
 DATE="`date "+%F-%T"`"
+
+# Use host and user authentication to allow us to auth as superuser
 /usr/bin/psql template1 -h localhost -U postgres -c "select pg_start_backup('${DATE}')" &&
-mkdir /var/lib/pgsql/backup-pre-${DATE} && chown postgres:postgres /var/lib/pgsql/backup-pre-${DATE} &&
-mv /var/lib/pgsql/backups/*  /var/lib/pgsql/backup-pre-${DATE}/ &&
-/usr/bin/rsync -a --delete /var/lib/pgsql/data/ /var/lib/pgsql/backups/ &&
+#{rsync_no24_sh} -a --delete /var/lib/pgsql/data/ /var/lib/pgsql/backups/ &&
 /usr/bin/psql template1 -h localhost -U postgres -c "select pg_stop_backup()"
 )
   
   push_text config, postgresql_conf, :sudo => true
   push_text backup_script, backup_sh, :sudo => true
+  push_text rsync_no24, rsync_no24_sh, :sudo => true
   
   yum "rsync" do
     post :install, "chown postgres:postgres #{backup_sh}"
     post :install, "chmod 700 #{backup_sh}" # user execute
+    post :install, "chmod 700 #{rsync_no24_sh}" # user execute
     post :install, "chcon -R -h -t postgresql_exec_t /usr/bin/test"
     post :install, "chcon -R -h -t postgresql_exec_t /usr/bin/rsync"
     post :install, 'sudo /sbin/service postgresql restart'
